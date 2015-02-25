@@ -40,7 +40,7 @@ while (my $line = <$fh>) {
     chomp $line;
     if ($state == 0) {
         if ($line =~ /^\./) {
-            if ($line eq $ext) {
+            if (grep {$_ eq $ext} (split /,/, $line)) {
                 $found = 1;
             }
             $state = 1;
