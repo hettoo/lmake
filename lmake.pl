@@ -50,7 +50,6 @@ while (my $line = <$fh>) {
         $state = 2;
     } elsif ($state == 2) {
         if ($line =~ /(.*?):(.*)/) {
-            print "$line\n";
             if ($found && $1 eq $mode) {
                 system "function f(){ $prefix $2 }; f $file $name";
                 exit;
