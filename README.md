@@ -4,7 +4,7 @@ Create files for simple projects and compile them without much effort.
 
 The script works by extensions: `lmake.pl test.tex` will copy `~/lmake/default.tex` to `test.tex` if it does not exist.
 If it does exist, the empty `.tex` action is executed on `test.tex`.
-A different action can be given as a second argument.
+A different action can be given as the second argument.
 
 These actions are specified in the file `~/lmake/config`.
 This file contains a sequence of blocks, separated by empty lines.
