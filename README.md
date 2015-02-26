@@ -10,7 +10,7 @@ These actions are specified in the file `~/lmake/config`.
 This file contains a sequence of blocks, separated by empty lines.
 Each block begins with a comma-delimited sequence of extensions (including the dot).
 The next line contains a command that is executed before every action, and the remaining lines define specific actions with the syntax `<action>:<command>`.
-Use `$1` to refer to the input filename and `$2` for that name without extension.
+Use `$1` and `$2` to refer to the input filename, respectively with and without extension.
 Make sure to end all commands with a semicolon.
 
 As an example, here is my `.tex` configuration:

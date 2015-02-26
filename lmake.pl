@@ -60,7 +60,12 @@ while (my $line = <$fh>) {
             if ($found && $1 eq $action) {
                 system "f(){ $prefix $2 };f $efile $ename";
                 close $fh;
-                exit;
+                if (@ARGV) {
+                    unshift @ARGV, $file;
+                    exec $^X, $0, @ARGV;
+                } else {
+                    exit;
+                }
             }
         } else {
             if ($found) {
