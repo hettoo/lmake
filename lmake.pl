@@ -7,10 +7,10 @@ my $MAIN = $ENV{'HOME'} . '/lmake/';
 
 my $file = shift @ARGV;
 if (!defined $file) {
-    die "please specify a target file";
+    die "Please specify a target file.\n";
 }
 if ($file !~ /^(.*)(\.[^\.]*)$/) {
-    die "the file should have an extension";
+    die "The target file should have an extension.\n";
 }
 my ($name, $ext) = ($1, $2);
 
@@ -35,10 +35,10 @@ sub progress {
 if (!-e $file) {
     my $def = "$MAIN/default$ext";
     if (!-e $def) {
-        die "no default $ext file";
+        die "No default $ext file available.\n";
     }
     (system 'cp ' . esc($def) . " $efile") == 0 or die $!;
-    print "$file created\n";
+    print "The file $file was created.\n";
     progress();
 }
 
@@ -81,6 +81,6 @@ while (my $line = <$fh>) {
 close $fh;
 
 if ($found) {
-    die "no configuration for $ext action \"$action\" found";
+    die "No configuration for $ext action \"$action\" found.\n";
 }
-die "no configuration for $ext found";
+die "No configuration for $ext found.\n";
