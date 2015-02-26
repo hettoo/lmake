@@ -6,15 +6,6 @@ use warnings;
 my $MAIN = $ENV{'HOME'} . '/lmake/';
 my $CFG = $MAIN . 'config';
 
-sub def {
-    return "$MAIN/default$_[0]";
-}
-
-sub esc {
-    $_[0] =~ s/'/''/g;
-    return "'$_[0]'";
-}
-
 my $file = shift @ARGV;
 if (!defined $file) {
     die "please specify a target file";
@@ -29,14 +20,22 @@ if ($file !~ /^(.*)(\.[^\.]*)$/) {
 }
 my ($name, $ext) = ($1, $2);
 
+sub esc {
+    my ($a) = @_;
+    $a =~ s/'/''/g;
+    return "'$a'";
+}
+
 my $efile = esc($file);
 my $ename = esc($name);
 
 if (!-e $file) {
-    if (!-e def($ext)) {
+    my $def = "$MAIN/default$ext";
+    if (!-e $def) {
         die "no default $ext file";
     }
-    system 'cp ' . esc(def($ext)) . " $efile";
+    system 'cp ' . esc($def) . " $efile";
+    print "$file created\n";
     exit;
 }
 
@@ -59,12 +58,13 @@ while (my $line = <$fh>) {
     } elsif ($state == 2) {
         if ($line =~ /(.*?):(.*)/) {
             if ($found && $1 eq $mode) {
-                system "function f(){ $prefix $2 }; f $efile $ename";
+                system "f(){ $prefix $2 };f $efile $ename";
+                close $fh;
                 exit;
             }
         } else {
             if ($found) {
-                die "no configuration for $ext mode \"$mode\" found";
+                last;
             }
             $state = 0;
         }
