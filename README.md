@@ -19,7 +19,7 @@ As an example, here is my `.tex` configuration:
 mkdir -p build;cmd="pdflatex -output-directory build ./$1";
 : $cmd;
 f: $cmd && $cmd;
-b: bibtex/$2.aux;
+b: bibtex build/$2.aux;
 bf: $cmd && bibtex build/$2.aux && $cmd && $cmd;
 v: evince build/$2.pdf;
 ```
