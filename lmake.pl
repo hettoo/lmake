@@ -10,9 +10,9 @@ my $file = shift @ARGV;
 if (!defined $file) {
     die "please specify a target file";
 }
-my $mode = '';
+my $action = '';
 if (@ARGV) {
-    $mode = shift @ARGV;
+    $action = shift @ARGV;
 }
 
 if ($file !~ /^(.*)(\.[^\.]*)$/) {
@@ -57,7 +57,7 @@ while (my $line = <$fh>) {
         $state = 2;
     } elsif ($state == 2) {
         if ($line =~ /(.*?):(.*)/) {
-            if ($found && $1 eq $mode) {
+            if ($found && $1 eq $action) {
                 system "f(){ $prefix $2 };f $efile $ename";
                 close $fh;
                 exit;
@@ -73,6 +73,6 @@ while (my $line = <$fh>) {
 close $fh;
 
 if ($found) {
-    die "no configuration for $ext mode \"$mode\" found";
+    die "no configuration for $ext action \"$action\" found";
 }
 die "no configuration for $ext found";
