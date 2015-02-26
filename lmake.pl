@@ -4,17 +4,11 @@ use strict;
 use warnings;
 
 my $MAIN = $ENV{'HOME'} . '/lmake/';
-my $CFG = $MAIN . 'config';
 
 my $file = shift @ARGV;
 if (!defined $file) {
     die "please specify a target file";
 }
-my $action = '';
-if (@ARGV) {
-    $action = shift @ARGV;
-}
-
 if ($file !~ /^(.*)(\.[^\.]*)$/) {
     die "the file should have an extension";
 }
@@ -29,20 +23,34 @@ sub esc {
 my $efile = esc($file);
 my $ename = esc($name);
 
+sub progress {
+    if (@ARGV) {
+        unshift @ARGV, $file;
+        exec $^X, $0, @ARGV or die $!;
+    } else {
+        exit;
+    }
+}
+
 if (!-e $file) {
     my $def = "$MAIN/default$ext";
     if (!-e $def) {
         die "no default $ext file";
     }
-    system 'cp ' . esc($def) . " $efile";
+    (system 'cp ' . esc($def) . " $efile") == 0 or die $!;
     print "$file created\n";
-    exit;
+    progress();
+}
+
+my $action = '';
+if (@ARGV) {
+    $action = shift @ARGV;
 }
 
 my $state = 0;
 my $found = 0;
 my $prefix;
-open my $fh, '<', $CFG;
+open my $fh, '<', $MAIN . 'config';
 while (my $line = <$fh>) {
     chomp $line;
     if ($state == 0) {
@@ -58,14 +66,9 @@ while (my $line = <$fh>) {
     } elsif ($state == 2) {
         if ($line =~ /(.*?):(.*)/) {
             if ($found && $1 eq $action) {
-                system "f(){ $prefix $2 };f $efile $ename";
+                (system "f(){ $prefix $2 };f $efile $ename") == 0 or die $!;
                 close $fh;
-                if (@ARGV) {
-                    unshift @ARGV, $file;
-                    exec $^X, $0, @ARGV;
-                } else {
-                    exit;
-                }
+                progress();
             }
         } else {
             if ($found) {
