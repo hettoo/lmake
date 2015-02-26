@@ -10,6 +10,11 @@ sub def {
     return "$MAIN/default$_[0]";
 }
 
+sub esc {
+    $_[0] =~ s/'/''/g;
+    return "'$_[0]'";
+}
+
 my $file = shift @ARGV;
 if (!defined $file) {
     die "please specify a target file";
@@ -24,11 +29,14 @@ if ($file !~ /^(.*)(\.[^\.]*)$/) {
 }
 my ($name, $ext) = ($1, $2);
 
+my $efile = esc($file);
+my $ename = esc($name);
+
 if (!-e $file) {
     if (!-e def($ext)) {
         die "no default $ext file";
     }
-    system 'cp ' . def($ext) . " $file";
+    system 'cp ' . esc(def($ext)) . " $efile";
     exit;
 }
 
@@ -51,7 +59,7 @@ while (my $line = <$fh>) {
     } elsif ($state == 2) {
         if ($line =~ /(.*?):(.*)/) {
             if ($found && $1 eq $mode) {
-                system "function f(){ $prefix $2 }; f $file $name";
+                system "function f(){ $prefix $2 }; f $efile $ename";
                 exit;
             }
         } else {
