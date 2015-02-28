@@ -42,7 +42,7 @@ if (!-e $file) {
     progress();
 }
 
-my $action = '';
+my $action = 'all';
 if (@ARGV) {
     $action = shift @ARGV;
 }
@@ -70,6 +70,11 @@ while (my $line = <$fh>) {
                 close $fh;
                 progress();
             }
+        } elsif ($line =~ /(.*?)@(.*)/) {
+            if ($found && $1 eq $action) {
+                unshift @ARGV, $2 =~ /\S+/g;
+                progress();
+            }
         } else {
             if ($found) {
                 last;
@@ -81,6 +86,6 @@ while (my $line = <$fh>) {
 close $fh;
 
 if ($found) {
-    die "No configuration for $ext action \"$action\" found.\n";
+    die "No configuration for $ext action $action found.\n";
 }
 die "No configuration for $ext found.\n";
