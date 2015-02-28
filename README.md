@@ -9,7 +9,7 @@ A different action can be given as the second argument.
 These actions are specified in the file `~/lmake/config`.
 This file contains a sequence of blocks, separated by empty lines.
 Each block begins with a comma-delimited sequence of extensions (including the dot).
-The next line contains a command that is executed before every action of these extensions, and the remaining lines define specific actions with the syntax `<action>:<command>` or `<action>:<actions>`, where the action list is delimited by whitespace.
+The next line contains a command that is executed before every action of these extensions, and the remaining lines define specific actions with the syntax `<action>:<command>` or `<action>@<actions>`, where the action list is delimited by whitespace.
 Use `$1` and `$2` to refer to the input filename, respectively with and without extension.
 Make sure to end all commands with a semicolon.
 
