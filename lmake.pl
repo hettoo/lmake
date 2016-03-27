@@ -9,7 +9,7 @@ my $file = shift @ARGV;
 if (!defined $file) {
     die "Please specify a target file.\n";
 }
-if ($file !~ /^(.*)(\.[^\.]*)$/) {
+if ($file !~ /^(.*?)(\.[^\/]*)$/) {
     die "The target file should have an extension.\n";
 }
 my ($name, $ext) = ($1, $2);
